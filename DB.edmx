@@ -1,0 +1,178 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Хранилище VirtualZooModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="privilege">
+          <Key>
+            <PropertyRef Name="Код" />
+          </Key>
+          <Property Name="Код" Type="int" Nullable="false" />
+          <Property Name="Доступ" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Код" />
+          </Key>
+          <Property Name="Код" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Логин" Type="nvarchar" MaxLength="50" />
+          <Property Name="Пароль" Type="nvarchar" MaxLength="50" />
+          <Property Name="Код_прав" Type="int" />
+          <Property Name="ФИО" Type="nvarchar" MaxLength="150" />
+          <Property Name="email" Type="nvarchar" MaxLength="50" />
+          <Property Name="Блокировка" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="zoo">
+          <Key>
+            <PropertyRef Name="Number" />
+          </Key>
+          <Property Name="Number" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name of the animal" Type="nvarchar" MaxLength="255" />
+          <Property Name="Описание" Type="nvarchar(max)" />
+          <Property Name="Interesting fact" Type="nvarchar(max)" />
+          <Property Name="Image" Type="nvarchar" MaxLength="255" />
+          <Property Name="sound" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <Association Name="FK_user_privilege">
+          <End Role="privilege" Type="Self.privilege" Multiplicity="0..1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="privilege">
+              <PropertyRef Name="Код" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="Код_прав" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище VirtualZooModelContainer">
+          <EntitySet Name="privilege" EntityType="Self.privilege" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="zoo" EntityType="Self.zoo" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_user_privilege" Association="Self.FK_user_privilege">
+            <End Role="privilege" EntitySet="privilege" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="VirtualZooModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="privilege">
+          <Key>
+            <PropertyRef Name="Код" />
+          </Key>
+          <Property Name="Код" Type="Int32" Nullable="false" />
+          <Property Name="Доступ" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="User" Relationship="Self.FK_user_privilege" FromRole="privilege" ToRole="User" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Код" />
+          </Key>
+          <Property Name="Код" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Логин" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Пароль" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Код_прав" Type="Int32" DefaultValue="2" />
+          <Property Name="ФИО" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Блокировка" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="privilege" Relationship="Self.FK_user_privilege" FromRole="User" ToRole="privilege" />
+        </EntityType>
+        <EntityType Name="zoo">
+          <Key>
+            <PropertyRef Name="Number" />
+          </Key>
+          <Property Name="Number" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name_of_the_animal" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Описание" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Interesting_fact" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Image" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="sound" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_user_privilege">
+          <End Role="privilege" Type="Self.privilege" Multiplicity="0..1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="privilege">
+              <PropertyRef Name="Код" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="Код_прав" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="VirtualZooEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="privilege" EntityType="Self.privilege" />
+          <EntitySet Name="User" EntityType="Self.User" />
+          <EntitySet Name="zoo" EntityType="Self.zoo" />
+          <AssociationSet Name="FK_user_privilege" Association="Self.FK_user_privilege">
+            <End Role="privilege" EntitySet="privilege" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище VirtualZooModelContainer" CdmEntityContainer="VirtualZooEntities">
+          <EntitySetMapping Name="privilege">
+            <EntityTypeMapping TypeName="VirtualZooModel.privilege">
+              <MappingFragment StoreEntitySet="privilege">
+                <ScalarProperty Name="Код" ColumnName="Код" />
+                <ScalarProperty Name="Доступ" ColumnName="Доступ" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User">
+            <EntityTypeMapping TypeName="VirtualZooModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="Код" ColumnName="Код" />
+                <ScalarProperty Name="Логин" ColumnName="Логин" />
+                <ScalarProperty Name="Пароль" ColumnName="Пароль" />
+                <ScalarProperty Name="Код_прав" ColumnName="Код_прав" />
+                <ScalarProperty Name="ФИО" ColumnName="ФИО" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="Блокировка" ColumnName="Блокировка" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="zoo">
+            <EntityTypeMapping TypeName="VirtualZooModel.zoo">
+              <MappingFragment StoreEntitySet="zoo">
+                <ScalarProperty Name="Number" ColumnName="Number" />
+                <ScalarProperty Name="Name_of_the_animal" ColumnName="Name of the animal" />
+                <ScalarProperty Name="Описание" ColumnName="Описание" />
+                <ScalarProperty Name="Interesting_fact" ColumnName="Interesting fact" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="sound" ColumnName="sound" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
